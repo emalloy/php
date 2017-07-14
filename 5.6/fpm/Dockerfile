@@ -26,6 +26,9 @@ RUN apt-get update && apt-get install -y \
 		libsqlite3-0 \
 		libxml2 \
 		xz-utils \
+                libzip-dev \
+                libmysqlclient18  \
+                libmysqlclient-dev \
 	--no-install-recommends && rm -r /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
@@ -126,8 +129,10 @@ RUN set -xe \
 		--enable-ftp \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
 		--enable-mbstring \
-# --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-		--enable-mysqlnd \
+# --enable-zip is included here because 
+		--enable-zip \
+# --with-mysql included here because as of php-5.4.0 use of libmysqlclient has been depreciated for mysqlnd.
+		--with-mysql=/usr \
 		\
 		--with-curl \
 		--with-libedit \
