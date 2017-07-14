@@ -22,7 +22,13 @@ RUN apk add --no-cache --virtual .persistent-deps \
 		ca-certificates \
 		curl \
 		tar \
-		xz
+		xz \
+                zip
+RUN apk add --update-cache  \
+            --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
+            --virtual .persistent-community-edge-deps \
+            libzip-dev
+               
 
 # ensure www-data user exists
 RUN set -x \
@@ -118,6 +124,10 @@ RUN set -xe \
 		--enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
 		--enable-mysqlnd \
+
+# --enable-zip is included here because it's harder to compile after the fact 
+                --enable-zip \
+                --with-libzip=/usr/lib/ \
 		\
 		--with-curl \
 		--with-libedit \
